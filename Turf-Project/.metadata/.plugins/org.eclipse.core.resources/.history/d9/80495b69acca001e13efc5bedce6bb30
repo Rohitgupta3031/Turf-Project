@@ -1,0 +1,72 @@
+package com.example.controller;
+
+import java.util.Collection;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.example.entity.UserRegistration;
+import com.example.service.UserRegistrationService;
+
+@requestOrigin("*")
+@RequestMapping("UserRegistration")
+@RestController
+public class UserRegistrationController {
+	
+	
+		@Autowired
+		private UserRegistrationService regServiceRef;
+		
+		
+		@GetMapping("/userregister-api")
+		public Collection<UserRegistration> getAllUsers(){
+			Collection<UserRegistration> allUsers = regServiceRef.getAllUsers();
+			return allUsers;
+		}
+		
+		
+		@GetMapping("/userregister-api/{userId}")
+		public UserRegistration getOneUser(@PathVariable("userId") Integer id) {
+			UserRegistration foundUser = regServiceRef.getOneUser(id);
+			//System.out.println("The found movie is: " + foundMovie);
+			return foundUser;
+		}
+		
+		@PostMapping("/userregister-api")
+		public void addNewUser(@RequestBody UserRegistration userRef) {
+			System.out.println(userRef);
+			regServiceRef.addNewUser(userRef);
+		}
+		
+		@DeleteMapping("/userregister-api/{userId}")
+		public void deleteOneUser(@PathVariable("userId") Integer id) {
+			regServiceRef.deleteOneUser(id);
+		}
+		
+		@PutMapping("/userregister-api/{userId}")
+		public void updateuser(@RequestBody UserRegistration userRef,@PathVariable("userId") Integer id) {
+			regServiceRef.updateUser(userRef, id);
+		}
+		
+//		@GetMapping("/user-update/{userID}")
+//		public void updatePassword(@RequestBody String oPass,String nPass,@PathVariable("userId") Integer id) throws Exception {
+//			regServiceRef.updatePassword(nPass, oPass, id);
+//		}
+		
+		@GetMapping("/user-login")
+		public boolean login(@RequestBody UserRegistration userRef ) {
+			return (regServiceRef.login(userRef.getUsername(), userRef.getPassword()));
+		}
+		
+	}
+
+
+
+
